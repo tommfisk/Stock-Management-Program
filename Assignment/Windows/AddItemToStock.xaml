@@ -7,42 +7,103 @@
         mc:Ignorable="d"
         Title="AddItemToStock" Height="450" Width="800">
     <Grid>
-        <Label Content="Add item to stock" FontSize="30" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="61" Width="244"/>
-        <ListBox x:Name="EmployeeList" FontSize="10" Margin="157,130,522,154" />
-        <Button Content="Add Item" HorizontalAlignment="Center" Margin="0,284,0,0" VerticalAlignment="Top" Height="40" Width="106" Click="AddItem_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Content="Add item to stock" 
+           Grid.Row="0" 
+           Grid.Column="0" 
+           HorizontalAlignment="Center" 
+           VerticalAlignment="Center" 
+           FontSize="25"/>
+
         <Label Content="Select Employee"
-            FontSize="15"
-            HorizontalAlignment="Left" 
-            Grid.Row="0"
-            Grid.Column="0" 
-            Margin="157,100,0,0" 
-            VerticalAlignment="Top"/>
-        <TextBox x:Name="ItemName" HorizontalAlignment="Left" FontSize="15" Margin="314,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" Height="28"/>
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top"
+           Grid.Row="1"
+           Grid.Column="0"
+           FontSize="15"
+           Margin="33,4,0,0"/>
+        <ListBox x:Name="EmployeeList" 
+             Grid.Row="1" 
+             Grid.RowSpan="2" 
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" 
+             FontSize="15"
+             Width="200"
+             Height="140"/>
+
         <Label Content="Item Name"
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top"
+           Grid.Row="1"
+           Grid.Column="1"
+           FontSize="15"
+           Margin="33,4,0,0"/>
+        <TextBox x:Name="ItemName" 
+             Text="" 
+             Grid.Row="1" 
+             Grid.Column="1" 
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" 
+             FontSize="15" 
+             TextWrapping="Wrap" 
+             Width="200" 
+             Height="30"/>
+
+        <Label Content="Quantity"
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top"
+           Grid.Row="2"
+           Grid.Column="1"
+           FontSize="15"
+           Margin="33,4,0,0"/>
+        <TextBox x:Name="ItemQuantity"
+             Text="" 
+             Grid.Row="2"
+             Grid.Column="1"
+             HorizontalAlignment="Center" 
+             VerticalAlignment="Center" 
+             FontSize="15"
+             TextWrapping="Wrap" 
+             Width="200" 
+             Height="30"/>
+
+        <Label Content="Item Price"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Grid.Row="3"
+               Grid.Column="1"
+               FontSize="15"
+               Margin="33,4,0,0"/>
+        <TextBox x:Name="ItemPrice"
+                 Text="" 
+                 Grid.Row="3"
+                 Grid.Column="1"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontSize="15"
+                 TextWrapping="Wrap" 
+                 Width="200" 
+                 Height="30"/>
+
+        <Button Content="Add item"
+            Grid.Row="3"
+            Grid.Column="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="50"
+            Width="200"
             FontSize="15"
-            HorizontalAlignment="Left" 
-            Grid.Row="0"
-            Grid.Column="0" 
-            Margin="314,100,0,0" 
-            VerticalAlignment="Top"/>
-        <TextBox x:Name="ItemQuantity" HorizontalAlignment="Left" FontSize="15" Margin="493,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" Height="28"/>
-        <Label Content="Item Quantity"
-            FontSize="15"
-            HorizontalAlignment="Left" 
-            Grid.Row="0"
-            Grid.Column="0" 
-            Margin="493,100,0,0" 
-            VerticalAlignment="Top"/>
-        <Grid HorizontalAlignment="Left" Height="60" Margin="296,169,0,0" VerticalAlignment="Top" Width="165">
-            <TextBox x:Name="ItemPrice" HorizontalAlignment="Left" FontSize="15" Margin="18,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="147" Height="28" />
-            <Label Content="Item Price"
-                FontSize="15"
-                HorizontalAlignment="Left" 
-                Grid.Row="0"
-                Grid.Column="0" 
-                Margin="17,0,0,0" 
-                VerticalAlignment="Top"/>
-            <Label Content="£" FontSize="15" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top"/>
-        </Grid>
+            Click="AddItem_Click"/>
     </Grid>
 </Window>

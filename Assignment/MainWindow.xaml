@@ -7,14 +7,86 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Add stock item" HorizontalAlignment="Left" Margin="95,102,0,0" VerticalAlignment="Top" Height="59" Width="221" Click="AddItemToStock_Click"/>
-        <Button Content="Add quantity to item" HorizontalAlignment="Left" Margin="95,168,0,0" VerticalAlignment="Top" Height="58" Width="221"/>
-        <Button Content="Take quantity from item" HorizontalAlignment="Left" Margin="95,233,0,0" VerticalAlignment="Top" Height="59" Width="221"/>
-        <Button Content="Inventory Report" HorizontalAlignment="Left" Margin="494,102,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
-        <Button Content="Financial Report" HorizontalAlignment="Left" Margin="494,170,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
-        <Button Content="Transaction Log" HorizontalAlignment="Left" Margin="494,237,0,0" VerticalAlignment="Top" Height="61" Width="227"/>
-        <Button Content="Personal Usage Report" HorizontalAlignment="Left" Margin="494,306,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
-        <Label Content="Stock Menu" FontSize="30" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="49" Width="172"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Content="Stock Menu"
+               Grid.Row="0"
+               Grid.Column="1"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="30" 
+               />
+        
+        <Button Content="Add stock item"
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"
+                Click="AddItemToStock_Click"/>
+        <Button Content="Add quantity to item" 
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"
+                Click="AddQuantityToItem_Click"/>
+        <Button Content="Take quantity from item" 
+                Grid.Row="3"
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"/>
+        
+        <Button Content="Inventory Report" 
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"/>
+        <Button Content="Financial Report" 
+                Grid.Row="2"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"/>
+        <Button Content="Transaction Log" 
+                Grid.Row="3"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"/>
+        <Button Content="Personal Usage Report" 
+                Grid.Row="4"
+                Grid.Column="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Height="50"
+                Width="200"
+                FontSize="15"/>
+        
 
 
     </Grid>

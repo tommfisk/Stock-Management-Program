@@ -97,11 +97,12 @@ namespace Assignment.Windows
                 ItemDTO item = dataGatewayFacade.FindItemByName(ItemName.Text);
                 EmployeeDTO employee = dataGatewayFacade.FindEmployeeByName(EmployeeList.SelectedItem.ToString());
                 dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", item.ID, employee.ID, int.Parse(ItemQuantity.Text)));
+                MessageBox.Show(this, "Item added");
+                this.Close();
             }
 
             EmployeeList.SelectedIndex = -1;
-            MessageBox.Show(this, "Item added");
-            this.Close();
+            
         }
     }
 }

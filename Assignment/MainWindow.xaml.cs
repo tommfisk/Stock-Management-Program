@@ -45,5 +45,15 @@ namespace Assignment
 
             window.ShowDialog();
         }
+
+        private void AddQuantityToItem_Click(object sender, RoutedEventArgs e)
+        {
+            AddQuantityToItem window = new AddQuantityToItem()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
+        }
     }
 }
