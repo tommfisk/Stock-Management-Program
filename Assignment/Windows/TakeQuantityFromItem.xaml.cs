@@ -1,19 +1,30 @@
 ﻿using DataGateway;
 using DTO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace Assignment.Windows
 {
     /// <summary>
-    /// Interaction logic for AddQuantityToItem.xaml
+    /// Interaction logic for TakeQuantityFromItem.xaml
     /// </summary>
-    public partial class AddQuantityToItem : Window
+    public partial class TakeQuantityFromItem : Window
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
         private static readonly List<EmployeeDTO> employeeList = dataGatewayFacade.GetAllEmployees();
 
-        public AddQuantityToItem()
+        public TakeQuantityFromItem()
         {
             InitializeComponent();
             bindListBox();
@@ -31,7 +42,7 @@ namespace Assignment.Windows
             EmployeeList.ItemsSource = employeeNames;
         }
 
-        private void AddQuantity_Click(object sender, RoutedEventArgs e)
+        private void TakeQuantity_Click(object sender, RoutedEventArgs e)
         {
             string errorMsg = "";
 
@@ -57,7 +68,7 @@ namespace Assignment.Windows
             // item quantity validation
             try
             {
-                if (int.Parse(QuantityToAdd.Text) < 0)
+                if (int.Parse(QuantityToTake.Text) < 0)
                 {
                     errorMsg += "Please input an item quantity above 0\n";
                 }
@@ -69,14 +80,14 @@ namespace Assignment.Windows
 
             if (errorMsg.Length > 0)
             {
-                MessageBox.Show(this, errorMsg, "Quantity not added", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(this, errorMsg, "Quantity not taken", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                dataGatewayFacade.AddQuantityToItem(int.Parse(ItemId.Text), int.Parse(QuantityToAdd.Text));
+                dataGatewayFacade.TakeQuantityFromItem(int.Parse(ItemId.Text), int.Parse(QuantityToTake.Text));
                 EmployeeDTO employee = dataGatewayFacade.FindEmployeeByName(EmployeeList.SelectedItem.ToString());
-                dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Added", int.Parse(ItemId.Text), employee.ID, int.Parse(QuantityToAdd.Text)));
-                MessageBox.Show(this, "Quantity added");
+                dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Taken", int.Parse(ItemId.Text), employee.ID, int.Parse(QuantityToTake.Text)));
+                MessageBox.Show(this, "Quantity Taken");
                 this.Close();
             }
 

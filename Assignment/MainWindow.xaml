@@ -52,7 +52,7 @@
                 VerticalAlignment="Center"
                 Height="50"
                 Width="200"
-                FontSize="15"/>
+                FontSize="15" Click="TakeQuantityFromItem_Click"/>
         
         <Button Content="Inventory Report" 
                 Grid.Row="1"
