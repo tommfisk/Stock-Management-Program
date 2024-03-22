@@ -113,6 +113,20 @@ namespace DataGateway
             return transactionDTOs;
         }
 
+        public List<EmployeeDTO> GetAllEmployees()
+        {
+
+            List<Employee> employees = new GetAllEmployees().Select();
+            List<EmployeeDTO> employeeDTOs = new List<EmployeeDTO>();
+
+            foreach (Employee employee in employees)
+            {
+                employeeDTOs.Add(converter.Convert(employee));
+            }
+
+            return employeeDTOs;
+        }
+
 
     }
 }

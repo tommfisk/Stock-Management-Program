@@ -6,14 +6,11 @@ namespace Assignment.DataGateway
 {
     // Single Responsibility Principle
     // Liskov Substitution Principle
-    public class FindEmployeeById : OracleDatabaseSelector<Employee>
+    public class GetAllEmployees : OracleDatabaseSelector<List<Employee>>
     {
 
-        private int employeeId;
-
-        public FindEmployeeById(int employeeId)
+        public GetAllEmployees()
         {
-            this.employeeId = employeeId;
         }
 
         protected override string GetSQL()
@@ -21,32 +18,32 @@ namespace Assignment.DataGateway
             return
                 "SELECT ID, Employee_Name " +
                 "FROM Employee " +
-                "WHERE ID = :EmployeeId";
+                "ORDER BY ID";
         }
 
-        protected override Employee DoSelect(OracleCommand command)
+        protected override List<Employee> DoSelect(OracleCommand command)
         {
+            List<Employee> employees = new List<Employee>();
             Employee employee = null;
 
             try
             {
-                command.Prepare();
-                command.Parameters.Add(":EmployeeId", employeeId);
                 OracleDataReader dr = command.ExecuteReader();
 
-                if (dr.Read())
+                while (dr.Read())
                 {
                     employee = new Employee(dr.GetInt32(0), dr.GetString(1));
+                    employees.Add(employee);
                 }
 
                 dr.Close();
             }
             catch (Exception e)
             {
-                throw new Exception("ERROR: retrieval of employee failed", e);
+                throw new Exception("ERROR: retrieval of employees failed", e);
             }
 
-            return employee;
+            return employees;
         }
     }
 }

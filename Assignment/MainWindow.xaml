@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button Content="Add stock item" HorizontalAlignment="Left" Margin="95,102,0,0" VerticalAlignment="Top" Height="59" Width="221" Click="AddItemToStock_Click"/>
+        <Button Content="Add quantity to item" HorizontalAlignment="Left" Margin="95,168,0,0" VerticalAlignment="Top" Height="58" Width="221"/>
+        <Button Content="Take quantity from item" HorizontalAlignment="Left" Margin="95,233,0,0" VerticalAlignment="Top" Height="59" Width="221"/>
+        <Button Content="Inventory Report" HorizontalAlignment="Left" Margin="494,102,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
+        <Button Content="Financial Report" HorizontalAlignment="Left" Margin="494,170,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
+        <Button Content="Transaction Log" HorizontalAlignment="Left" Margin="494,237,0,0" VerticalAlignment="Top" Height="61" Width="227"/>
+        <Button Content="Personal Usage Report" HorizontalAlignment="Left" Margin="494,306,0,0" VerticalAlignment="Top" Height="60" Width="227"/>
+        <Label Content="Stock Menu" FontSize="30" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="49" Width="172"/>
+
 
     </Grid>
 </Window>

@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Assignment.Windows;
+using DataGateway;
 
 namespace Assignment
 {
@@ -16,9 +18,32 @@ namespace Assignment
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
+
         public MainWindow()
         {
             InitializeComponent();
+            dataGatewayFacade.InitialiseOracleDatabase();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddItemToStock_Click(object sender, RoutedEventArgs e)
+        {
+            AddItemToStock window = new AddItemToStock()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
         }
     }
 }
