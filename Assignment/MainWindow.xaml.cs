@@ -65,5 +65,35 @@ namespace Assignment
 
             window.ShowDialog();
         }
+
+        private void ViewInventoryReport_Click(object sender, RoutedEventArgs e)
+        {
+            ViewInventoryReport window = new ViewInventoryReport()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
+        }
+
+        private void FinancialReport_Click(object sender, RoutedEventArgs e)
+        {
+            ViewFinancialReport window = new ViewFinancialReport()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
+        }
+
+        private void TransactionLog_Click(object sender, RoutedEventArgs e)
+        {
+            ViewTransactionLog window = new ViewTransactionLog()
+            {
+                Owner = this
+            };
+
+            window.ShowDialog();
+        }
     }
 }
