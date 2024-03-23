@@ -25,8 +25,6 @@
                     return new ViewTransactionLogCommand();
                 case ICommand.VIEW_PERSONAL_USAGE_REPORT:
                     return new ViewPersonalUsageCommand();
-                case ICommand.DISPLAY_MENU:
-                    return new DisplayMenuCommand();
                 default:
                     return new NullCommand();
             }

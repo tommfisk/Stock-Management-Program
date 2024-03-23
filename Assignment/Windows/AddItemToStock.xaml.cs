@@ -25,34 +25,17 @@ namespace Assignment.Windows
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
         private static readonly List<EmployeeDTO> employeeList = dataGatewayFacade.GetAllEmployees();
+        private EmployeeDTO employee;
 
-        public AddItemToStock()
+        public AddItemToStock(EmployeeDTO employee)
         {
             InitializeComponent();
-            bindListBox();
-        }
-
-        private void bindListBox()
-        {
-            List<string> employeeNames = new List<string>();
-
-            foreach(EmployeeDTO employee in employeeList)
-            {
-                employeeNames.Add(employee.Employee_Name);
-            }
-
-            EmployeeList.ItemsSource = employeeNames;
+            this.employee = employee;
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
             string errorMsg = "";
-
-            // employee selection validation
-            if (EmployeeList.SelectedIndex == -1)
-            {
-                errorMsg += "Please select an employee\n";
-            }
 
             // item name validation
             if (ItemName.Text == "")
@@ -95,14 +78,10 @@ namespace Assignment.Windows
             {
                 dataGatewayFacade.AddItem(new ItemDTO(ItemName.Text, int.Parse(ItemQuantity.Text), double.Parse(ItemPrice.Text)));
                 ItemDTO item = dataGatewayFacade.FindItemByName(ItemName.Text);
-                EmployeeDTO employee = dataGatewayFacade.FindEmployeeByName(EmployeeList.SelectedItem.ToString());
                 dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", item.ID, employee.ID, int.Parse(ItemQuantity.Text)));
                 MessageBox.Show(this, "Item added");
                 this.Close();
             }
-
-            EmployeeList.SelectedIndex = -1;
-            
         }
     }
 }

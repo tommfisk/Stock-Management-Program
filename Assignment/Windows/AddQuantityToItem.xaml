@@ -18,30 +18,13 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <Label Content="Add quantity to item" 
-               Grid.Row="0" 
-               Grid.Column="0" 
+               Grid.Column="1" 
                HorizontalAlignment="Center" 
                VerticalAlignment="Center" 
                FontSize="25"/>
 
-        <Label Content="Select Employee"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Top"
-               Grid.Row="1"
-               Grid.Column="0"
-               FontSize="15"
-               Margin="33,4,0,0"/>
-        <ListBox x:Name="EmployeeList" 
-                 Grid.Row="1" 
-                 Grid.RowSpan="2" 
-                 HorizontalAlignment="Center" 
-                 VerticalAlignment="Center" 
-                 FontSize="15"
-                 Width="200"
-                 Height="140"/>
-        
         <Label Content="Item ID"
                HorizontalAlignment="Left"
                VerticalAlignment="Top"
@@ -87,7 +70,7 @@
                 Width="200"
                 FontSize="15"
                 Click="AddQuantity_Click"/>
-        
+
 
     </Grid>
 </Window>

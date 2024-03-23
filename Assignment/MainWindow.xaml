@@ -26,7 +26,24 @@
                VerticalAlignment="Center"
                FontSize="30" 
                />
-        
+
+        <Label Content="Select Employee"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               Grid.Row="1"
+               Grid.Column="1"
+               FontSize="15"
+               Margin="0,4,0,0"/>
+        <ListBox x:Name="EmployeeList"
+                 Grid.Row="1" 
+                 Grid.RowSpan="3" 
+                 Grid.Column="1"
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Top" 
+                 FontSize="15"
+                 Width="200"
+                 Height="200" Margin="0,39,0,0"/>
+
         <Button Content="Add stock item"
                 Grid.Row="1"
                 Grid.Column="0"
@@ -53,7 +70,7 @@
                 Height="50"
                 Width="200"
                 FontSize="15" Click="TakeQuantityFromItem_Click"/>
-        
+
         <Button Content="Inventory Report" 
                 Grid.Row="1"
                 Grid.Column="3"
@@ -86,8 +103,9 @@
                 VerticalAlignment="Center"
                 Height="50"
                 Width="200"
-                FontSize="15"/>
-        
+                FontSize="15" 
+                Click="PersonalUsageReport_Click"/>
+
 
 
     </Grid>

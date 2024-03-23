@@ -22,35 +22,17 @@ namespace Assignment.Windows
     public partial class TakeQuantityFromItem : Window
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private static readonly List<EmployeeDTO> employeeList = dataGatewayFacade.GetAllEmployees();
+        private EmployeeDTO employee;
 
-        public TakeQuantityFromItem()
+        public TakeQuantityFromItem(EmployeeDTO employee)
         {
             InitializeComponent();
-            bindListBox();
-        }
-
-        private void bindListBox()
-        {
-            List<string> employeeNames = new List<string>();
-
-            foreach (EmployeeDTO employee in employeeList)
-            {
-                employeeNames.Add(employee.Employee_Name);
-            }
-
-            EmployeeList.ItemsSource = employeeNames;
+            this.employee = employee;
         }
 
         private void TakeQuantity_Click(object sender, RoutedEventArgs e)
         {
             string errorMsg = "";
-
-            // employee selection validation
-            if (EmployeeList.SelectedIndex == -1)
-            {
-                errorMsg += "Please select an employee\n";
-            }
 
             // item id validation
             try
@@ -85,13 +67,10 @@ namespace Assignment.Windows
             else
             {
                 dataGatewayFacade.TakeQuantityFromItem(int.Parse(ItemId.Text), int.Parse(QuantityToTake.Text));
-                EmployeeDTO employee = dataGatewayFacade.FindEmployeeByName(EmployeeList.SelectedItem.ToString());
                 dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Taken", int.Parse(ItemId.Text), employee.ID, int.Parse(QuantityToTake.Text)));
                 MessageBox.Show(this, "Quantity Taken");
                 this.Close();
             }
-
-            EmployeeList.SelectedIndex = -1;
         }
     }
 }

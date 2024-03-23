@@ -15,8 +15,6 @@ namespace Assignment.Command
         public const int VIEW_FINANCIAL_REPORT = 5;
         public const int VIEW_TRANSACTION_LOG = 6;
         public const int VIEW_PERSONAL_USAGE_REPORT = 7;
-        public const int EXIT = 8;
-        public const int DISPLAY_MENU = 9;
 
         public abstract void Execute();
     }
