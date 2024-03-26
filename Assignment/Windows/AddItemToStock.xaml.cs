@@ -24,7 +24,6 @@ namespace Assignment.Windows
     public partial class AddItemToStock : Window
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private static readonly List<EmployeeDTO> employeeList = dataGatewayFacade.GetAllEmployees();
         private EmployeeDTO employee;
 
         public AddItemToStock(EmployeeDTO employee)

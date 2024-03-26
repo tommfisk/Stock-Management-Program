@@ -65,11 +65,14 @@ namespace Assignment
 
         private void showWindow(Type windowClass)
         {
-            var window = Activator.CreateInstance(windowClass, new object[] { getEmployeeDTO() });
+            Window window = (Window)Activator.CreateInstance(windowClass, new object[] { getEmployeeDTO() });
+            window.ShowDialog();
+            
         }
 
         private void AddItemToStock_Click(object sender, RoutedEventArgs e)
         {
+
             if (employeeIsSelected())
             {
                 AddItemToStock window = new AddItemToStock(getEmployeeDTO())
@@ -83,7 +86,6 @@ namespace Assignment
             {
                 MessageBox.Show(this, "Please select an employee");
             }
-
         }
 
         private void AddQuantityToItem_Click(object sender, RoutedEventArgs e)
