@@ -51,14 +51,16 @@ namespace DataGateway
             return new InsertTransaction(transaction).Insert();
         }
 
-        public int AddQuantityToItem(int id, int quantity)
+        public int AddQuantityToItem(ItemDTO itemDTO)
         {
-            return new AddQuantityToItem(id, quantity).Update();
+            Item item = converter.Convert(itemDTO);
+            return new AddQuantityToItem(item).Update();
         }
 
-        public int TakeQuantityFromItem(int id, int quantity)
+        public int TakeQuantityFromItem(ItemDTO itemDTO)
         {
-            return new TakeQuantityFromItem(id, quantity).Update();
+            Item item = converter.Convert(itemDTO);
+            return new TakeQuantityFromItem(item).Update();
         }
 
         public ItemDTO FindItemById(int id)

@@ -1,5 +1,4 @@
-﻿using DataGateway;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +19,6 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewTransactionLog : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
 
         public ViewTransactionLog()
         {
@@ -30,7 +28,7 @@ namespace Assignment.Windows
 
         private void bindDataGrid()
         {
-            TransactionDataGrid.ItemsSource = dataGatewayFacade.GetAllTransactions();
+            /*TransactionDataGrid.ItemsSource = dataGatewayFacade.GetAllTransactions();*/
         }
     }
 }

@@ -9,24 +9,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Assignment.Windows;
-using DataGateway;
 using DTO;
+using WPF_Client;
 
 namespace Assignment
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private static readonly List<EmployeeDTO> employeeList = dataGatewayFacade.GetAllEmployees();
+        private static MyWPFClient client = MyWPFClient.getInstance();
+        private static List<EmployeeDTO> employeeList = client.getEmployeeList();
+        private Task clientTask;
+
 
         public MainWindow()
         {
             InitializeComponent();
-            dataGatewayFacade.InitialiseOracleDatabase();
             bindEmployeeList();
+            clientTask = Task.Run(client.Run);
         }
 
         private void bindEmployeeList()
@@ -63,63 +63,46 @@ namespace Assignment
             return null;
         }
 
-        private void showWindow(Type windowClass)
+        private void display(Window window)
         {
-            Window window = (Window)Activator.CreateInstance(windowClass, new object[] { getEmployeeDTO() });
-            window.ShowDialog();
-            
+            if (employeeIsSelected())
+            {
+                window.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(this, "Please select an employee");
+            }
         }
 
         private void AddItemToStock_Click(object sender, RoutedEventArgs e)
         {
-
-            if (employeeIsSelected())
+            AddItemToStock window = new AddItemToStock()
             {
-                AddItemToStock window = new AddItemToStock(getEmployeeDTO())
-                {
-                    Owner = this
-                };
+                Owner = this
+            };
 
-                window.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select an employee");
-            }
+            display(window);
         }
 
         private void AddQuantityToItem_Click(object sender, RoutedEventArgs e)
         {
-            if (employeeIsSelected())
+            AddQuantityToItem window = new AddQuantityToItem()
             {
-                AddQuantityToItem window = new AddQuantityToItem(getEmployeeDTO())
-                {
-                    Owner = this
-                };
+                Owner = this
+            };
 
-                window.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select an employee");
-            }
+            display(window);
         }
 
         private void TakeQuantityFromItem_Click(object sender, RoutedEventArgs e)
         {
-            if (employeeIsSelected())
+            TakeQuantityFromItem window = new TakeQuantityFromItem()
             {
-                TakeQuantityFromItem window = new TakeQuantityFromItem(getEmployeeDTO())
-                {
-                    Owner = this
-                };
+                Owner = this
+            };
 
-                window.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select an employee");
-            }
+            display(window);
         }
 
         private void ViewInventoryReport_Click(object sender, RoutedEventArgs e)
@@ -129,7 +112,7 @@ namespace Assignment
                 Owner = this
             };
 
-            window.ShowDialog();
+            display(window);
         }
 
         private void FinancialReport_Click(object sender, RoutedEventArgs e)
@@ -139,7 +122,7 @@ namespace Assignment
                 Owner = this
             };
 
-            window.ShowDialog();
+            display(window);
         }
 
         private void TransactionLog_Click(object sender, RoutedEventArgs e)
@@ -149,24 +132,17 @@ namespace Assignment
                 Owner = this
             };
 
-            window.ShowDialog();
+            display(window);
         }
 
         private void PersonalUsageReport_Click(object sender, RoutedEventArgs e)
         {
-            if (employeeIsSelected())
+            ViewPersonalUsageReport window = new ViewPersonalUsageReport()
             {
-                ViewPersonalUsageReport window = new ViewPersonalUsageReport(getEmployeeDTO())
-                {
-                    Owner = this
-                };
+                Owner = this
+            };
 
-                window.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select an employee");
-            }
+            display(window);
         }
     }
 }

@@ -16,10 +16,10 @@ namespace Assignment.DataGateway
         private int id;
         private int quantity;
 
-        public AddQuantityToItem(int id, int quantity)
+        public AddQuantityToItem(Item item)
         {
-            this.id = id;
-            this.quantity = quantity;
+            this.id = item.ID;
+            this.quantity = item.Quantity;
         }
 
         protected override string GetSQL()

@@ -1,5 +1,5 @@
-﻿using DataGateway;
-using DTO;
+﻿using DTO;
+using Library;
 using System.Windows;
 
 
@@ -10,14 +10,9 @@ namespace Assignment.Windows
     /// </summary>
     public partial class AddQuantityToItem : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private EmployeeDTO employee;
-
-
-        public AddQuantityToItem(EmployeeDTO employee)
+        public AddQuantityToItem()
         {
             InitializeComponent();
-            this.employee = employee;
         }
 
         private void AddQuantity_Click(object sender, RoutedEventArgs e)
@@ -56,8 +51,7 @@ namespace Assignment.Windows
             }
             else
             {
-                dataGatewayFacade.AddQuantityToItem(int.Parse(ItemId.Text), int.Parse(QuantityToAdd.Text));
-                dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Added", int.Parse(ItemId.Text), employee.ID, int.Parse(QuantityToAdd.Text)));
+                
                 MessageBox.Show(this, "Quantity added");
                 this.Close();
             }

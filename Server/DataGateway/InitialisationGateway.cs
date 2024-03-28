@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Library;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -137,10 +138,10 @@ namespace DataGateway
             dataGatewayFacade.AddItem(new ItemDTO("eraser", 20, 3.50));
             dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 2, 2, 20));
 
-            dataGatewayFacade.TakeQuantityFromItem(1, 4);
+            dataGatewayFacade.TakeQuantityFromItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
             dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Taken", 1, 1, 4));
 
-            dataGatewayFacade.AddQuantityToItem(2, 2);
+            dataGatewayFacade.AddQuantityToItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
             dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Added", 2, 2, 2));
 
             CloseOracleConnection(conn);

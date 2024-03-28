@@ -1,5 +1,4 @@
-﻿using DataGateway;
-using DTO;
+﻿using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,6 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewInventoryReport : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
 
         public ViewInventoryReport()
         {
@@ -31,7 +29,7 @@ namespace Assignment.Windows
 
         private void bindDataGrid()
         {
-            InventoryDataGrid.ItemsSource = dataGatewayFacade.GetAllItems();
+            /*InventoryDataGrid.ItemsSource = dataGatewayFacade.GetAllItems();*/
         }
 
     }

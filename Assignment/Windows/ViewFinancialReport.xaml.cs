@@ -1,5 +1,4 @@
-﻿using DataGateway;
-using DTO;
+﻿using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,6 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewFinancialReport : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
 
         public ViewFinancialReport()
         {
@@ -31,7 +29,7 @@ namespace Assignment.Windows
 
         private void financialReport()
         {
-            List<ItemDTO> itemDTOs = dataGatewayFacade.GetAllItems();
+            /*List<ItemDTO> itemDTOs = dataGatewayFacade.GetAllItems();
             List<string> items = new List<string>();
             double itemTotal = 0;
             double total = 0;
@@ -42,7 +40,7 @@ namespace Assignment.Windows
                 total += itemTotal;
             });
             FinancialReport.ItemsSource = items;
-            totalLabel.Content = $"Total: £{total}";
+            totalLabel.Content = $"Total: £{total}";*/
         }
     }
 }

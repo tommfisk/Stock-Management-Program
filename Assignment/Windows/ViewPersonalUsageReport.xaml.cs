@@ -1,5 +1,4 @@
-﻿using DataGateway;
-using DTO;
+﻿using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,31 +20,27 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewPersonalUsageReport : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private EmployeeDTO employee;
 
-        public ViewPersonalUsageReport(EmployeeDTO employee)
+        public ViewPersonalUsageReport()
         {
             InitializeComponent();
-            this.employee = employee;
-            bindDataGrid();
-            
+            bindDataGrid();  
         }
 
         private void bindDataGrid()
         {
-            List<TransactionDTO> transactions = dataGatewayFacade.GetAllTransactions();
+            /*List<TransactionDTO> transactions = dataGatewayFacade.GetAllTransactions();
             List<TransactionDTO> personalTransactions = new List<TransactionDTO>();
 
             foreach (TransactionDTO transaction in transactions) 
             {  
-                if (transaction.Employee_ID == employee.ID)
+                if (transaction.Employee_ID == 1)
                 {
                     personalTransactions.Add(transaction);
                 }
             }
 
-            PersonalUsageDataGrid.ItemsSource = personalTransactions;
+            PersonalUsageDataGrid.ItemsSource = personalTransactions;*/
         }
     }
 }

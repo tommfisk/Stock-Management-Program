@@ -1,6 +1,4 @@
-﻿using Assignment.Command;
-using DataGateway;
-using DTO;
+﻿using DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Client;
 
 namespace Assignment.Windows
 {
@@ -23,13 +22,11 @@ namespace Assignment.Windows
     /// </summary>
     public partial class AddItemToStock : Window
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-        private EmployeeDTO employee;
+        private static MyWPFClient client = MyWPFClient.getInstance();
 
-        public AddItemToStock(EmployeeDTO employee)
+        public AddItemToStock()
         {
             InitializeComponent();
-            this.employee = employee;
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
@@ -75,9 +72,7 @@ namespace Assignment.Windows
             }
             else
             {
-                dataGatewayFacade.AddItem(new ItemDTO(ItemName.Text, int.Parse(ItemQuantity.Text), double.Parse(ItemPrice.Text)));
-                ItemDTO item = dataGatewayFacade.FindItemByName(ItemName.Text);
-                dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", item.ID, employee.ID, int.Parse(ItemQuantity.Text)));
+                client.AddRequest(1, new ItemDTO(ItemName.Text, int.Parse(ItemQuantity.Text), double.Parse(ItemPrice.Text)));
                 MessageBox.Show(this, "Item added");
                 this.Close();
             }
