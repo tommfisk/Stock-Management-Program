@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataGateway;
+using DTO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -8,6 +10,7 @@ namespace ServerSide
 {
     class ClientService
     {
+        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
 
         private Socket socket;
         private NetworkStream stream;
@@ -15,8 +18,6 @@ namespace ServerSide
         public StreamWriter writer { get; private set; }
 
         private RemoveClient removeMe;
-
-        private string employeeName;
 
         public ClientService(Socket socket, RemoveClient rc)
         {
@@ -31,10 +32,11 @@ namespace ServerSide
         {
             try
             {
-                string clientMessage = reader.ReadLine();
-                while (clientMessage != null)
+                string clientRequest = reader.ReadLine();
+                while (clientRequest != null)
                 {
-                    ProcessClientMessage(clientMessage);
+                    ProcessClientMessage(clientRequest);
+                    clientRequest = reader.ReadLine();
                 }
             }
             catch (IOException e)
@@ -48,14 +50,27 @@ namespace ServerSide
 
         private void ProcessClientMessage(string message)
         {
-            if (message.StartsWith("Employee")) 
+            try
             {
-                this.employeeName = message.Substring(10);
+                if (int.TryParse(message.Substring(0, 1), out int command))
+                {
+                    if (command == 1) 
+                    {
+                        Console.WriteLine("Request received for getting all employees");
+                        string employees = JsonSerializer.Serialize(dataGatewayFacade.GetAllEmployees());
+                        lock (writer)
+                        {
+                            writer.WriteLine(employees);
+                            writer.Flush();
+                        }
+                    }
+                }
             }
-            else if (int.TryParse(message.Substring(0, 1), out int command))
+            catch (IOException e)
             {
-                
+                Console.WriteLine("ERROR: " + e.Message);
             }
+            
         }
 
         public void Close()

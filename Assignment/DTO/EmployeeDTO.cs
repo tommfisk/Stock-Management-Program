@@ -1,24 +1,22 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
-namespace DTO
+public class EmployeeDTO
 {
-    // DTO Design Pattern
-    [Serializable]
-    public class EmployeeDTO
+    [JsonProperty("ID")]
+    public int ID { get; set; }
+    [JsonProperty("Employee_Name")]
+    public string Employee_Name { get; set; }
+
+    [JsonConstructor]
+    public EmployeeDTO(int id, string Employee_Name)
     {
-        public int ID { get; }
-        public string Employee_Name { get; set; }
+        this.ID = id;
+        this.Employee_Name = Employee_Name;
+    }
 
-
-        public EmployeeDTO(int id, string Employee_Name)
-        {
-            this.ID = id;
-            this.Employee_Name = Employee_Name;
-        }
-
-        public EmployeeDTO(string Employee_Name)
-        {
-            this.Employee_Name = Employee_Name;
-        }
+    public EmployeeDTO(string Employee_Name)
+    {
+        this.Employee_Name = Employee_Name;
     }
 }
+

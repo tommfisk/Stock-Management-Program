@@ -1,44 +1,53 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using Assignment.Windows;
-using DTO;
 using WPF_Client;
+using DTO;
 
 namespace Assignment
 {
+    delegate ItemDTO GetItemDTO();
+    delegate void ShowMessage(string msg);
 
     public partial class MainWindow : Window
     {
-        private static MyWPFClient client = MyWPFClient.getInstance();
-        private static List<EmployeeDTO> employeeList = client.getEmployeeList();
+        private MyWPFClient client;
         private Task clientTask;
 
 
         public MainWindow()
         {
             InitializeComponent();
-            bindEmployeeList();
+            client = new MyWPFClient(ShowMessage, GetItemDTO);
             clientTask = Task.Run(client.Run);
+            bindEmployeeList();
+        }
+
+        private ItemDTO GetItemDTO()
+        {
+            return null;
+        }
+
+        private void ShowMessage(string msg)
+        {
+            MessageBox.Show(msg);
         }
 
         private void bindEmployeeList()
         {
             List<string> employeeNames = new List<string>();
 
-            foreach (EmployeeDTO employee in employeeList)
+            while (EmployeeList.ItemsSource == null)
             {
-                employeeNames.Add(employee.Employee_Name);
-            }
+                if (client.employees != null)
+                {
+                    foreach (EmployeeDTO employee in client.employees)
+                    {
+                        employeeNames.Add(employee.Employee_Name);
+                    }
 
-            EmployeeList.ItemsSource = employeeNames;
+                    EmployeeList.ItemsSource = employeeNames;
+                }
+            }
         }
 
         private bool employeeIsSelected()
@@ -48,19 +57,9 @@ namespace Assignment
                 return false;
             }
 
+            client.selectedEmployee = (string)EmployeeList.SelectedItem;
+
             return true;
-        }
-
-        private EmployeeDTO getEmployeeDTO()
-        {
-            string employeeName = EmployeeList.SelectedItem.ToString();
-
-            foreach (EmployeeDTO employee in employeeList)
-            {
-                if (employee.Employee_Name == employeeName) { return employee; }
-            }
-
-            return null;
         }
 
         private void display(Window window)

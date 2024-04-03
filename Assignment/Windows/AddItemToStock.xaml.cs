@@ -22,7 +22,6 @@ namespace Assignment.Windows
     /// </summary>
     public partial class AddItemToStock : Window
     {
-        private static MyWPFClient client = MyWPFClient.getInstance();
 
         public AddItemToStock()
         {
@@ -72,7 +71,6 @@ namespace Assignment.Windows
             }
             else
             {
-                client.AddRequest(1, new ItemDTO(ItemName.Text, int.Parse(ItemQuantity.Text), double.Parse(ItemPrice.Text)));
                 MessageBox.Show(this, "Item added");
                 this.Close();
             }

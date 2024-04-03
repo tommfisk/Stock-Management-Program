@@ -7,38 +7,39 @@ using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using Newtonsoft.Json;
 
 namespace WPF_Client
 {
-    public sealed class MyWPFClient
+    class MyWPFClient
     {
-        private static MyWPFClient instance = null;
-
         private TcpClient tcpClient;
         private NetworkStream stream;
         private StreamReader reader;
         private StreamWriter writer;
         private bool clientRunning;
+        public List<EmployeeDTO> employees;
+        public string selectedEmployee { get; set; }
 
-        private ConcurrentDictionary<int, ItemDTO> requests;
+        private BlockingCollection<int> commands;
+        public ConcurrentQueue<Type> responses { get; set; }
+
+        private ShowMessage ShowMessage;
+        private GetItemDTO GetItemDTO;
 
 
-        private MyWPFClient()
+        public MyWPFClient(ShowMessage ShowMessage, GetItemDTO GetItemDTO)
         {
             tcpClient = new TcpClient();
-            requests = new ConcurrentDictionary<int, ItemDTO>();
-        }
-
-        public static MyWPFClient getInstance()
-        {
-            if (instance == null)
-            {
-                instance = new MyWPFClient();
-            }
-            return instance;
+            commands = new BlockingCollection<int>();
+            responses = new ConcurrentQueue<Type>();
+            this.ShowMessage = ShowMessage;
+            this.GetItemDTO = GetItemDTO;
         }
 
         public void Run()
@@ -47,21 +48,26 @@ namespace WPF_Client
             
             if (Connect("localhost", 4444))
             {
-                /*Task.Run(ReadFromServer);*/
+                Task.Run(ReadFromServer);
+
+                commands.Add(1);
 
                 while (clientRunning)
                 {
-                    if (requests.Count > 0)
+                    if (commands.Count > 0)
                     {
-                        KeyValuePair<int, ItemDTO> request = requests.Last();
+                        int command = commands.Take();
 
-                        WriteToServer(request);
+                        ItemDTO itemDTO = GetItemDTO();
+                        string serialisedItem = JsonConvert.SerializeObject(itemDTO);
+
+                        WriteToServer(command, serialisedItem);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("ERROR: Connection to server not successful");
+                ShowMessage("ERROR: Connection to server not successful");
             }
             tcpClient.Close();
         }
@@ -77,47 +83,43 @@ namespace WPF_Client
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: " + e.Message);
+                ShowMessage("Exception: " + e.Message);
                 return false;
             }
             return true;
         }
 
-        private string serialise(ItemDTO item)
+        private void WriteToServer(int command, string item)
         {
-            return JsonSerializer.Serialize(item);
-        }
-
-        private void WriteToServer(KeyValuePair<int, ItemDTO> request)
-        {
-            int command = request.Key;
-            if (command == 0)
+            switch (command)
             {
-                clientRunning = false;
-            }
-            else if (command >= 1 && command <= 3)
-            {
-                string serialisedItem = serialise(request.Value);
-                lock (writer)
-                {
-                    writer.WriteLine(command);
-                    writer.WriteLine(serialisedItem);
-                    writer.Flush();
-                }
-            }
-            else if (command >= 4 && command <= 7)
-            {
-                lock (writer)
-                {
-                    writer.WriteLine(command);
-                    writer.Flush();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Choice not recognised");
-            }
-            
+                case 0:
+                    clientRunning = false;
+                    break;
+                case 1:
+                    lock (writer)
+                    {
+                        writer.WriteLine(command);
+                        writer.Flush();
+                    }    
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    lock (writer)
+                    {
+                        writer.WriteLine(command);
+                        writer.WriteLine(item);
+                        writer.Flush();
+                    }
+                    break;
+                default:
+                    ShowMessage("Choice not recognised");
+                    break;
+            } 
         }
 
         private void ReadFromServer()
@@ -125,38 +127,18 @@ namespace WPF_Client
             while (clientRunning)
             {
                 string serverResponse = reader.ReadLine();
-                List<string> msg = JsonSerializer.Deserialize<List<string>>(serverResponse);
+                List<EmployeeDTO> DTOs = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serverResponse);
+                if (DTOs != null)
+                {
+                    employees = DTOs;
+                }
+
             }
         }
 
-        public void setEmployee(string employeeName)
+        public void AddCommand(int command)
         {
-            lock (writer)
-            {
-                writer.WriteLine("Employee: " + employeeName);
-                writer.Flush();
-            }
-        }
-
-        public EmployeeDTO getEmployee()
-        {
-            string serverResponse = reader.ReadLine();
-            return JsonSerializer.Deserialize<EmployeeDTO>(serverResponse);
-        }
-
-        public List<EmployeeDTO> getEmployeeList()
-        {
-            string serverResponse = reader.ReadLine();
-            return JsonSerializer.Deserialize<List<EmployeeDTO>>(serverResponse);
-        }
-
-        public void AddRequest(int command, ItemDTO item)
-        {
-            lock (requests)
-            {
-                requests.TryAdd(command, item);
-            }
-            
+            commands.Add(command);
         }
     }
 }
