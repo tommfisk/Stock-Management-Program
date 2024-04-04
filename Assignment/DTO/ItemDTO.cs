@@ -32,6 +32,10 @@ namespace DTO
             this.Quantity = quantity;
             this.Price = price;
         }
+
+        public ItemDTO()
+        {
+        }
     }
 }
 

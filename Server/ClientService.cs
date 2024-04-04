@@ -66,6 +66,12 @@ namespace ServerSide
                 if (request.command == 2)
                 {
                     Console.WriteLine("Request received for adding item");
+                    dataGatewayFacade.AddItem(request.item);
+                }
+                if (request.command == 3)
+                {
+                    Console.WriteLine("Request recevied for adding quantity to item");
+                    dataGatewayFacade.AddQuantityToItem(request.item);
                 }
 
             }

@@ -80,7 +80,7 @@ namespace Assignment
 
         private void AddQuantityToItem_Click(object sender, RoutedEventArgs e)
         {
-            AddQuantityToItem window = new AddQuantityToItem()
+            AddQuantityToItem window = new AddQuantityToItem(client)
             {
                 Owner = this
             };
