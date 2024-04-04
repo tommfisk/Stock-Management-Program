@@ -1,22 +1,24 @@
 ﻿using Newtonsoft.Json;
 
-public class EmployeeDTO
+namespace DTO
 {
-    [JsonProperty("ID")]
-    public int ID { get; set; }
-    [JsonProperty("Employee_Name")]
-    public string Employee_Name { get; set; }
-
-    [JsonConstructor]
-    public EmployeeDTO(int id, string Employee_Name)
+    public class EmployeeDTO
     {
-        this.ID = id;
-        this.Employee_Name = Employee_Name;
-    }
+        [JsonProperty("ID")]
+        public int ID { get; set; }
+        [JsonProperty("Employee_Name")]
+        public string Employee_Name { get; set; }
 
-    public EmployeeDTO(string Employee_Name)
-    {
-        this.Employee_Name = Employee_Name;
+        [JsonConstructor]
+        public EmployeeDTO(int id, string Employee_Name)
+        {
+            this.ID = id;
+            this.Employee_Name = Employee_Name;
+        }
+
+        public EmployeeDTO(string Employee_Name)
+        {
+            this.Employee_Name = Employee_Name;
+        }
     }
 }
-

@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,19 @@ namespace Assignment.Windows
     /// </summary>
     public partial class AddItemToStock : Window
     {
+        private MyWPFClient client;
 
-        public AddItemToStock()
+        public AddItemToStock(MyWPFClient client)
         {
             InitializeComponent();
+            this.client = client;
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
+            const int ADD_ITEM_TO_STOCK = 2;
+            RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(ADD_ITEM_TO_STOCK).WithEmployeeId(client.selectedEmployee.ID);
+            ItemDTOBuilder itemDTOBuilder = new ItemDTOBuilder();
             string errorMsg = "";
 
             // item name validation
@@ -71,6 +77,9 @@ namespace Assignment.Windows
             }
             else
             {
+                ItemDTO item = itemDTOBuilder.WithName(ItemName.Text).WithQuantity(int.Parse(ItemQuantity.Text)).WithPrice(double.Parse(ItemPrice.Text)).Build();
+                RequestDTO request = requestDTOBuilder.WithItem(item).Build();
+                client.QueueRequest(request);
                 MessageBox.Show(this, "Item added");
                 this.Close();
             }

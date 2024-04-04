@@ -5,8 +5,6 @@ using DTO;
 
 namespace Assignment
 {
-    delegate ItemDTO GetItemDTO();
-    delegate void ShowMessage(string msg);
 
     public partial class MainWindow : Window
     {
@@ -17,19 +15,9 @@ namespace Assignment
         public MainWindow()
         {
             InitializeComponent();
-            client = new MyWPFClient(ShowMessage, GetItemDTO);
+            client = MyWPFClient.getInstance();
             clientTask = Task.Run(client.Run);
             bindEmployeeList();
-        }
-
-        private ItemDTO GetItemDTO()
-        {
-            return null;
-        }
-
-        private void ShowMessage(string msg)
-        {
-            MessageBox.Show(msg);
         }
 
         private void bindEmployeeList()
@@ -57,7 +45,13 @@ namespace Assignment
                 return false;
             }
 
-            client.selectedEmployee = (string)EmployeeList.SelectedItem;
+            foreach (EmployeeDTO employee in client.employees)
+            {
+                if (employee.Employee_Name == EmployeeList.SelectedItem)
+                {
+                    client.selectedEmployee = employee;
+                }
+            }
 
             return true;
         }
@@ -76,7 +70,7 @@ namespace Assignment
 
         private void AddItemToStock_Click(object sender, RoutedEventArgs e)
         {
-            AddItemToStock window = new AddItemToStock()
+            AddItemToStock window = new AddItemToStock(client)
             {
                 Owner = this
             };

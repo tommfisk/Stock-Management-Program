@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace ServerSide
 {
@@ -50,21 +50,24 @@ namespace ServerSide
 
         private void ProcessClientMessage(string message)
         {
+            RequestDTO request = JsonConvert.DeserializeObject<RequestDTO>(message);
             try
             {
-                if (int.TryParse(message.Substring(0, 1), out int command))
+                if (request.command == 1)
                 {
-                    if (command == 1) 
+                    Console.WriteLine("Request received for getting all employees");
+                    string employees = JsonConvert.SerializeObject(dataGatewayFacade.GetAllEmployees());
+                    lock (writer)
                     {
-                        Console.WriteLine("Request received for getting all employees");
-                        string employees = JsonSerializer.Serialize(dataGatewayFacade.GetAllEmployees());
-                        lock (writer)
-                        {
-                            writer.WriteLine(employees);
-                            writer.Flush();
-                        }
+                        writer.WriteLine(employees);
+                        writer.Flush();
                     }
                 }
+                if (request.command == 2)
+                {
+                    Console.WriteLine("Request received for adding item");
+                }
+
             }
             catch (IOException e)
             {
