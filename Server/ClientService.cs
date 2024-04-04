@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
+using Assignment.Command;
 
 namespace ServerSide
 {
@@ -65,14 +66,11 @@ namespace ServerSide
                 }
                 if (request.command == 2)
                 {
-                    Console.WriteLine("Request received for adding item");
-                    dataGatewayFacade.AddItem(request.item);
+                    CommandFactory commandFactory = new CommandFactory();
+
+                    commandFactory.Create(request).Execute();
                 }
-                if (request.command == 3)
-                {
-                    Console.WriteLine("Request recevied for adding quantity to item");
-                    dataGatewayFacade.AddQuantityToItem(request.item);
-                }
+                
 
             }
             catch (IOException e)

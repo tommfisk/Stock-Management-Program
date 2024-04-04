@@ -1,4 +1,6 @@
-﻿namespace Assignment.Command
+﻿using DTO;
+
+namespace Assignment.Command
 {
     // Factory design pattern
     public class CommandFactory
@@ -7,11 +9,11 @@
         {
         }
 
-        public ICommand Create(int commandCode)
+        public ICommand Create(RequestDTO request)
         {
-            return commandCode switch
+            return request.command switch
             {
-                ICommand.ADD_ITEM_TO_STOCK => new AddItemToStockCommand(),
+                ICommand.ADD_ITEM_TO_STOCK => new AddItemToStockCommand(request),
                 ICommand.ADD_QUANTITY_TO_ITEM => new AddQuantityToItemCommand(),
                 ICommand.TAKE_QUANTITY_FROM_ITEM => new TakeQuantityFromItemCommand(),
                 ICommand.VIEW_INVENTORY_REPORT => new ViewInventoryReportCommand(),
