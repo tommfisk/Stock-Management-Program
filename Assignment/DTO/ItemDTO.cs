@@ -3,6 +3,7 @@ namespace DTO
 {
     public class ItemDTO
     {
+        [JsonProperty("ID")]
         public int ID { get; }
 
         [JsonProperty("Item_Name")]
@@ -14,8 +15,10 @@ namespace DTO
         [JsonProperty("Price")]
         public double Price { get; }
 
+        [JsonProperty("Date_Created")]
         public DateTime Date_Created { get; }
 
+        [JsonConstructor]
         public ItemDTO(int id, string item_name, int quantity, double price, DateTime date_created)
         {
             this.ID = id;
@@ -23,14 +26,6 @@ namespace DTO
             this.Quantity = quantity;
             this.Price = price;
             this.Date_Created = date_created;
-        }
-
-        [JsonConstructor]
-        public ItemDTO(string item_name, int quantity, double price)
-        {
-            this.Item_Name = item_name;
-            this.Quantity = quantity;
-            this.Price = price;
         }
 
         public ItemDTO()

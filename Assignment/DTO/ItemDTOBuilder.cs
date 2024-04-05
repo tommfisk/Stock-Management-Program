@@ -2,7 +2,7 @@
 using DTO;
 using System;
 
-namespace Library
+namespace DTO
 {
     // Builder Design Pattern
     public class ItemDTOBuilder

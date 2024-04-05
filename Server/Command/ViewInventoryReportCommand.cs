@@ -2,37 +2,34 @@
 using DTO;
 using System.Globalization;
 using DataGateway;
+using Newtonsoft.Json;
 
-namespace Assignment.Command
+namespace Server.Command
 {
     public class ViewInventoryReportCommand : ICommand
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
+        private RequestDTO request;
+        private StreamWriter writer;
 
-        public ViewInventoryReportCommand() 
-        { 
+        public ViewInventoryReportCommand(RequestDTO request, StreamWriter writer) 
+        {
+            this.request = request;
+            this.writer = writer;
         }
 
         public void Execute() 
         {
-            Console.WriteLine("\nAll items");
-            Console.WriteLine(
-                "\t{0, -4} {1, -20} {2, -20} {3, -10}",
-                "ID",
-                "Name",
-                "Quantity",
-                "Price"
-                );
 
-            foreach (ItemDTO itemDTO in dataGatewayFacade.GetAllItems())
+            List<ItemDTO> itemList = dataGatewayFacade.GetAllItems();
+
+            ResponseDTO responseDTO = new ResponseDTOBuilder().WithCommand(request.command).WithItems(itemList).Build();
+            string response = JsonConvert.SerializeObject(responseDTO);
+
+            lock (writer)
             {
-                Console.WriteLine(
-                    "\t{0, -4} {1, -20} {2, -20} {3, -10}",
-                    itemDTO.ID,
-                    itemDTO.Item_Name,
-                    itemDTO.Quantity,
-                    itemDTO.Price.ToString("C", CultureInfo.CurrentCulture)
-                    );
+                writer.WriteLine(response);
+                writer.Flush();
             }
         }
     }

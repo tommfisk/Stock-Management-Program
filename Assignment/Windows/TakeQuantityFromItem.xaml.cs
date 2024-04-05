@@ -1,17 +1,6 @@
 ﻿using DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using WPF_Client;
 
 namespace Assignment.Windows
 {
@@ -20,14 +9,18 @@ namespace Assignment.Windows
     /// </summary>
     public partial class TakeQuantityFromItem : Window
     {
+        private MyWPFClient client;
         
-        public TakeQuantityFromItem()
+        public TakeQuantityFromItem(MyWPFClient client)
         {
             InitializeComponent();
+            this.client = client;
         }
 
         private void TakeQuantity_Click(object sender, RoutedEventArgs e)
         {
+            RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(3).WithEmployeeId(client.selectedEmployee.ID);
+            ItemDTOBuilder itemDTOBuilder = new ItemDTOBuilder();
             string errorMsg = "";
 
             // item id validation
@@ -62,8 +55,9 @@ namespace Assignment.Windows
             }
             else
             {
-                
-                MessageBox.Show(this, "Quantity Taken");
+                ItemDTO item = itemDTOBuilder.WithID(int.Parse(ItemId.Text)).WithQuantity(int.Parse(QuantityToTake.Text)).Build();
+                RequestDTO request = requestDTOBuilder.WithItem(item).Build();
+                client.QueueRequest(request);
                 this.Close();
             }
         }

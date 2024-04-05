@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
-using Assignment.Command;
+using Server.Command;
 
 namespace ServerSide
 {
@@ -54,24 +54,9 @@ namespace ServerSide
             RequestDTO request = JsonConvert.DeserializeObject<RequestDTO>(message);
             try
             {
-                if (request.command == 1)
-                {
-                    Console.WriteLine("Request received for getting all employees");
-                    string employees = JsonConvert.SerializeObject(dataGatewayFacade.GetAllEmployees());
-                    lock (writer)
-                    {
-                        writer.WriteLine(employees);
-                        writer.Flush();
-                    }
-                }
-                if (request.command == 2)
-                {
-                    CommandFactory commandFactory = new CommandFactory();
+                CommandFactory commandFactory = new CommandFactory();
 
-                    commandFactory.Create(request).Execute();
-                }
-                
-
+                commandFactory.Create(request, writer).Execute();
             }
             catch (IOException e)
             {

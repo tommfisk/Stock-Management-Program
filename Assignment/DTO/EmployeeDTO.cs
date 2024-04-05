@@ -20,5 +20,9 @@ namespace DTO
         {
             this.Employee_Name = Employee_Name;
         }
+
+        public EmployeeDTO()
+        {
+        }
     }
 }

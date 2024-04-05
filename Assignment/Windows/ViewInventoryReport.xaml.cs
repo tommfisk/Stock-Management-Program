@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Client;
 
 namespace Assignment.Windows
 {
@@ -20,16 +21,28 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewInventoryReport : Window
     {
+        private MyWPFClient client;
 
-        public ViewInventoryReport()
+        public ViewInventoryReport(MyWPFClient client)
         {
             InitializeComponent();
-            bindDataGrid();
+            this.client = client;
+            inventoryReport();
         }
 
-        private void bindDataGrid()
+        private void inventoryReport()
         {
-            /*InventoryDataGrid.ItemsSource = dataGatewayFacade.GetAllItems();*/
+            RequestDTO request = new RequestDTOBuilder().WithCommand(4).Build();
+            client.QueueRequest(request);
+
+            while (InventoryDataGrid.ItemsSource == null)
+            {
+                if (client.items != null)
+                {
+                    InventoryDataGrid.ItemsSource = client.items;
+                }
+            }
+            
         }
 
     }

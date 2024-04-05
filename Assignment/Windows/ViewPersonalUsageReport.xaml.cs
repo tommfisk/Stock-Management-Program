@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Client;
 
 namespace Assignment.Windows
 {
@@ -20,27 +21,24 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewPersonalUsageReport : Window
     {
+        private MyWPFClient client;
 
-        public ViewPersonalUsageReport()
+        public ViewPersonalUsageReport(MyWPFClient client)
         {
             InitializeComponent();
-            bindDataGrid();  
+            this.client = client;
+            personalTransactionlLog();  
         }
 
-        private void bindDataGrid()
+        private void personalTransactionlLog()
         {
-            /*List<TransactionDTO> transactions = dataGatewayFacade.GetAllTransactions();
-            List<TransactionDTO> personalTransactions = new List<TransactionDTO>();
-
-            foreach (TransactionDTO transaction in transactions) 
-            {  
-                if (transaction.Employee_ID == 1)
+            while (PersonalUsageDataGrid.ItemsSource == null)
+            {
+                if (client.personalTransactions != null)
                 {
-                    personalTransactions.Add(transaction);
+                    PersonalUsageDataGrid.ItemsSource = client.personalTransactions;
                 }
             }
-
-            PersonalUsageDataGrid.ItemsSource = personalTransactions;*/
         }
     }
 }

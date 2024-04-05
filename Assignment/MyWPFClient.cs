@@ -16,35 +16,28 @@ using Newtonsoft.Json;
 
 namespace WPF_Client
 {
-    public sealed class MyWPFClient
+    public class MyWPFClient
     {
-        private static MyWPFClient instance = null;
         private TcpClient tcpClient;
         private NetworkStream stream;
         private StreamReader reader;
         private StreamWriter writer;
         private bool clientRunning;
         public List<EmployeeDTO> employees;
+        public List<ItemDTO> items;
+        public List<TransactionDTO> transactions;
+        public List<TransactionDTO> personalTransactions;
         public EmployeeDTO selectedEmployee { get; set; }
 
         private ConcurrentQueue<RequestDTO> requests;
         public ConcurrentQueue<Type> responses { get; set; }
 
 
-        private MyWPFClient()
+        public MyWPFClient()
         {
             tcpClient = new TcpClient();
             requests = new ConcurrentQueue<RequestDTO>();
             responses = new ConcurrentQueue<Type>();
-        }
-
-        public static MyWPFClient getInstance()
-        {
-            if (instance == null)
-            {
-                return new MyWPFClient();
-            }
-            return instance;
         }
 
         public void Run()
@@ -92,28 +85,17 @@ namespace WPF_Client
         private void WriteToServer(RequestDTO request)
         {
             string serialisedRequest = JsonConvert.SerializeObject(request);
-            switch (request.command)
+
+            if (request.command == 0)
             {
-                case 0:
-                    clientRunning = false;
-                    break;
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    lock (writer)
-                    {
-                        writer.WriteLine(serialisedRequest);
-                        writer.Flush();
-                    }
-                    break;
-                default:
-                    MessageBox.Show("Choice not recognised");
-                    break;
-            } 
+                clientRunning = false;
+            }
+
+            lock (writer)
+            {
+                writer.WriteLine(serialisedRequest);
+                writer.Flush();
+            }
         }
 
         private void ReadFromServer()
@@ -121,10 +103,30 @@ namespace WPF_Client
             while (clientRunning)
             {
                 string serverResponse = reader.ReadLine();
-                List<EmployeeDTO> DTOs = JsonConvert.DeserializeObject<List<EmployeeDTO>>(serverResponse);
-                if (DTOs != null)
+                ResponseDTO response = JsonConvert.DeserializeObject<ResponseDTO>(serverResponse);
+                switch (response.command)
                 {
-                    employees = DTOs;
+                    case 1:
+                    case 2:
+                    case 3:
+                        if (response.numRowsAffected != 1)
+                        {
+                            MessageBox.Show("Rows not affected");
+                        }
+                        break;
+                    case 4:
+                    case 5:
+                        items = response.items;
+                        break;
+                    case 6:
+                        transactions = response.transactions;
+                        break;
+                    case 7:
+                        personalTransactions = response.transactions;
+                        break;
+                    case 8:
+                        employees = response.employees;
+                        break;
                 }
 
             }
@@ -139,7 +141,7 @@ namespace WPF_Client
         {
             if (employees == null)
             {
-                QueueRequest(new RequestDTOBuilder().WithCommand(1).Build());
+                QueueRequest(new RequestDTOBuilder().WithCommand(8).Build());
             }
             
         }

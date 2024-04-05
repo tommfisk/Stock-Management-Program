@@ -15,7 +15,7 @@ namespace Assignment
         public MainWindow()
         {
             InitializeComponent();
-            client = MyWPFClient.getInstance();
+            client = new MyWPFClient();
             clientTask = Task.Run(client.Run);
             bindEmployeeList();
         }
@@ -90,7 +90,7 @@ namespace Assignment
 
         private void TakeQuantityFromItem_Click(object sender, RoutedEventArgs e)
         {
-            TakeQuantityFromItem window = new TakeQuantityFromItem()
+            TakeQuantityFromItem window = new TakeQuantityFromItem(client)
             {
                 Owner = this
             };
@@ -100,7 +100,7 @@ namespace Assignment
 
         private void ViewInventoryReport_Click(object sender, RoutedEventArgs e)
         {
-            ViewInventoryReport window = new ViewInventoryReport()
+            ViewInventoryReport window = new ViewInventoryReport(client)
             {
                 Owner = this
             };
@@ -110,7 +110,7 @@ namespace Assignment
 
         private void FinancialReport_Click(object sender, RoutedEventArgs e)
         {
-            ViewFinancialReport window = new ViewFinancialReport()
+            ViewFinancialReport window = new ViewFinancialReport(client)
             {
                 Owner = this
             };
@@ -120,7 +120,7 @@ namespace Assignment
 
         private void TransactionLog_Click(object sender, RoutedEventArgs e)
         {
-            ViewTransactionLog window = new ViewTransactionLog()
+            ViewTransactionLog window = new ViewTransactionLog(client)
             {
                 Owner = this
             };
@@ -130,7 +130,7 @@ namespace Assignment
 
         private void PersonalUsageReport_Click(object sender, RoutedEventArgs e)
         {
-            ViewPersonalUsageReport window = new ViewPersonalUsageReport()
+            ViewPersonalUsageReport window = new ViewPersonalUsageReport(client)
             {
                 Owner = this
             };

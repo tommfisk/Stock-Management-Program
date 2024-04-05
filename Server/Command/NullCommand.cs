@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Assignment.Command
+namespace Server.Command
 {
     // Null object design pattern
     public class NullCommand : ICommand

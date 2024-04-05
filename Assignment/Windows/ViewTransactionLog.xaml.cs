@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WPF_Client;
 
 namespace Assignment.Windows
 {
@@ -19,16 +20,24 @@ namespace Assignment.Windows
     /// </summary>
     public partial class ViewTransactionLog : Window
     {
+        private MyWPFClient client;
 
-        public ViewTransactionLog()
+        public ViewTransactionLog(MyWPFClient client)
         {
             InitializeComponent();
-            bindDataGrid();
+            this.client = client;
+            /*transactionLog();*/
         }
 
-        private void bindDataGrid()
+        /*private void transactionLog()
         {
-            /*TransactionDataGrid.ItemsSource = dataGatewayFacade.GetAllTransactions();*/
-        }
+            while (TransactionDataGrid.ItemsSource == null)
+            {
+                if (client.transactions != null)
+                {
+                    TransactionDataGrid.ItemsSource = client.transactions;
+                }
+            }
+        }*/
     }
 }

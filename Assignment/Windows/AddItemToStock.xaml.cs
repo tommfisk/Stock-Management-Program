@@ -1,19 +1,5 @@
 ﻿using DTO;
-using Library;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WPF_Client;
 
 namespace Assignment.Windows
@@ -33,7 +19,7 @@ namespace Assignment.Windows
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            const int ADD_ITEM_TO_STOCK = 2;
+            const int ADD_ITEM_TO_STOCK = 1;
             RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(ADD_ITEM_TO_STOCK).WithEmployeeId(client.selectedEmployee.ID);
             ItemDTOBuilder itemDTOBuilder = new ItemDTOBuilder();
             string errorMsg = "";
@@ -80,7 +66,6 @@ namespace Assignment.Windows
                 ItemDTO item = itemDTOBuilder.WithName(ItemName.Text).WithQuantity(int.Parse(ItemQuantity.Text)).WithPrice(double.Parse(ItemPrice.Text)).Build();
                 RequestDTO request = requestDTOBuilder.WithItem(item).Build();
                 client.QueueRequest(request);
-                MessageBox.Show(this, "Item added");
                 this.Close();
             }
         }

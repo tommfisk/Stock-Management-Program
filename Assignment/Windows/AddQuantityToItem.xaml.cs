@@ -1,5 +1,4 @@
 ﻿using DTO;
-using Library;
 using System.Windows;
 using WPF_Client;
 
@@ -20,7 +19,7 @@ namespace Assignment.Windows
 
         private void AddQuantity_Click(object sender, RoutedEventArgs e)
         {
-            const int ADD_QUANTITY_TO_ITEM = 3;
+            const int ADD_QUANTITY_TO_ITEM = 2;
             RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(ADD_QUANTITY_TO_ITEM).WithEmployeeId(client.selectedEmployee.ID);
             ItemDTOBuilder itemDTOBuilder = new ItemDTOBuilder();
             string errorMsg = "";
@@ -60,7 +59,6 @@ namespace Assignment.Windows
                 ItemDTO item = itemDTOBuilder.WithID(int.Parse(ItemId.Text)).WithQuantity(int.Parse(QuantityToAdd.Text)).Build();
                 RequestDTO request = requestDTOBuilder.WithItem(item).Build();
                 client.QueueRequest(request);
-                MessageBox.Show(this, "Quantity added");
                 this.Close();
             }
         }
