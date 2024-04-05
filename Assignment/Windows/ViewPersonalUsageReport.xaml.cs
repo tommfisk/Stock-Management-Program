@@ -32,6 +32,9 @@ namespace Assignment.Windows
 
         private void personalTransactionlLog()
         {
+            RequestDTO request = new RequestDTOBuilder().WithCommand(7).WithEmployeeId(client.selectedEmployee.ID).Build();
+            client.QueueRequest(request);
+
             while (PersonalUsageDataGrid.ItemsSource == null)
             {
                 if (client.personalTransactions != null)

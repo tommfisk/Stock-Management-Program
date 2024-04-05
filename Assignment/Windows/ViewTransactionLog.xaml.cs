@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,11 +27,14 @@ namespace Assignment.Windows
         {
             InitializeComponent();
             this.client = client;
-            /*transactionLog();*/
+            transactionLog();
         }
 
-        /*private void transactionLog()
+        private void transactionLog()
         {
+            RequestDTO request = new RequestDTOBuilder().WithCommand(6).Build();
+            client.QueueRequest(request);
+
             while (TransactionDataGrid.ItemsSource == null)
             {
                 if (client.transactions != null)
@@ -38,6 +42,6 @@ namespace Assignment.Windows
                     TransactionDataGrid.ItemsSource = client.transactions;
                 }
             }
-        }*/
+        }
     }
 }

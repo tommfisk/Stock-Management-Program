@@ -130,12 +130,19 @@ namespace Assignment
 
         private void PersonalUsageReport_Click(object sender, RoutedEventArgs e)
         {
-            ViewPersonalUsageReport window = new ViewPersonalUsageReport(client)
+            if (employeeIsSelected())
             {
-                Owner = this
-            };
+                ViewPersonalUsageReport window = new ViewPersonalUsageReport(client)
+                {
+                    Owner = this
+                };
 
-            display(window);
+                window.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(this, "Please select an employee");
+            }
         }
     }
 }
