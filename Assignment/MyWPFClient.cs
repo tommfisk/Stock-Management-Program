@@ -22,11 +22,7 @@ namespace WPF_Client
         private NetworkStream stream;
         private StreamReader reader;
         private StreamWriter writer;
-        private bool clientRunning;
-        public List<EmployeeDTO> employees;
-        public List<ItemDTO> items;
-        public List<TransactionDTO> transactions;
-        public List<TransactionDTO> personalTransactions;
+        public List<EmployeeDTO> employees { get; set; }
         public EmployeeDTO selectedEmployee { get; set; }
 
         private ConcurrentQueue<RequestDTO> requests;
@@ -38,31 +34,17 @@ namespace WPF_Client
             tcpClient = new TcpClient();
             requests = new ConcurrentQueue<RequestDTO>();
             responses = new ConcurrentQueue<Type>();
+            if(!Connect("localhost", 4444))
+            {
+                MessageBox.Show("COULD NOT CONNECT TO SERVER");
+            }
         }
 
-        public void Run()
+        public ResponseDTO Run(RequestDTO request)
         {
-            clientRunning = true;
-            
-            if (Connect("localhost", 4444))
-            {
-                Task.Run(ReadFromServer);
+            WriteToServer(request);
 
-                GetAllEmployees();
-
-                while (clientRunning)
-                {
-                    if (requests.TryDequeue(out RequestDTO request))
-                    {
-                        WriteToServer(request);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("ERROR: Connection to server not successful");
-            }
-            tcpClient.Close();
+            return ReadFromServer();
         }
 
         private bool Connect(string url, int portNumber)
@@ -86,11 +68,6 @@ namespace WPF_Client
         {
             string serialisedRequest = JsonConvert.SerializeObject(request);
 
-            if (request.command == 0)
-            {
-                clientRunning = false;
-            }
-
             lock (writer)
             {
                 writer.WriteLine(serialisedRequest);
@@ -98,43 +75,19 @@ namespace WPF_Client
             }
         }
 
-        private void ReadFromServer()
+        private ResponseDTO ReadFromServer()
         {
-            while (clientRunning)
+            string serverResponse = reader.ReadLine();
+            while (serverResponse == null)
             {
-                string serverResponse = reader.ReadLine();
-                ResponseDTO response = JsonConvert.DeserializeObject<ResponseDTO>(serverResponse);
-                switch (response.command)
-                {
-                    case 1:
-                    case 2:
-                    case 3:
-                        if (response.numRowsAffected != 1)
-                        {
-                            MessageBox.Show("Rows not affected");
-                        }
-                        break;
-                    case 4:
-                    case 5:
-                        items = response.items;
-                        break;
-                    case 6:
-                        transactions = response.transactions;
-                        break;
-                    case 7:
-                        personalTransactions = response.transactions;
-                        break;
-                    case 8:
-                        employees = response.employees;
-                        break;
-                }
-
+                serverResponse = reader.ReadLine();
             }
+            return JsonConvert.DeserializeObject<ResponseDTO>(serverResponse);
         }
 
-        public void QueueRequest(RequestDTO request)
+        public Task<ResponseDTO> QueueRequest(RequestDTO request)
         {
-            requests.Enqueue(request);
+            return Task.Run(() => Run(request));
         }
 
         private void GetAllEmployees()

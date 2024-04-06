@@ -30,33 +30,29 @@ namespace Assignment.Windows
             financialReport();
         }
 
-        private void financialReport()
+        private async void financialReport()
         {
             RequestDTO request = new RequestDTOBuilder().WithCommand(5).Build();
-            client.QueueRequest(request);
+            ResponseDTO response = await client.QueueRequest(request);
 
-            while (FinancialReport.ItemsSource == null)
+
+            List<string> items = new List<string>();
+            double itemTotal = 0;
+            double total = 0;
+
+            response.items.ForEach(itemDTO =>
             {
-                if (client.items != null)
-                {
-                    List<string> items = new List<string>();
-                    double itemTotal = 0;
-                    double total = 0;
+                itemTotal = itemDTO.Price * itemDTO.Quantity;
+                items.Add($"{itemDTO.ID}. {itemDTO.Item_Name}: £{itemTotal} ");
+                total += itemTotal;
+            });
 
-                    client.items.ForEach(itemDTO =>
-                    {
-                        itemTotal = itemDTO.Price * itemDTO.Quantity;
-                        items.Add($"{itemDTO.ID}. {itemDTO.Item_Name}: £{itemTotal} ");
-                        total += itemTotal;
-                    });
-
-                    FinancialReport.ItemsSource = items;
-                    totalLabel.Content = $"Total: £{total}";
-                }
-            }
+            FinancialReport.ItemsSource = items;
+            totalLabel.Content = $"Total: £{total}";
 
 
-            
+
+
         }
     }
 }

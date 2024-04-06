@@ -30,18 +30,13 @@ namespace Assignment.Windows
             personalTransactionlLog();  
         }
 
-        private void personalTransactionlLog()
+        private async void personalTransactionlLog()
         {
             RequestDTO request = new RequestDTOBuilder().WithCommand(7).WithEmployeeId(client.selectedEmployee.ID).Build();
-            client.QueueRequest(request);
+            ResponseDTO response = await client.QueueRequest(request);
 
-            while (PersonalUsageDataGrid.ItemsSource == null)
-            {
-                if (client.personalTransactions != null)
-                {
-                    PersonalUsageDataGrid.ItemsSource = client.personalTransactions;
-                }
-            }
+            PersonalUsageDataGrid.ItemsSource = response.transactions;
+
         }
     }
 }

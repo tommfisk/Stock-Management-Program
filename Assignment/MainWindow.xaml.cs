@@ -9,33 +9,31 @@ namespace Assignment
     public partial class MainWindow : Window
     {
         private MyWPFClient client;
-        private Task clientTask;
 
 
         public MainWindow()
         {
             InitializeComponent();
             client = new MyWPFClient();
-            clientTask = Task.Run(client.Run);
             bindEmployeeList();
         }
 
-        private void bindEmployeeList()
+        private async void bindEmployeeList()
         {
+            RequestDTO request = new RequestDTOBuilder().WithCommand(8).Build();
+
+            ResponseDTO response = await client.QueueRequest(request);
+
             List<string> employeeNames = new List<string>();
 
-            while (EmployeeList.ItemsSource == null)
+            foreach (EmployeeDTO employee in response.employees)
             {
-                if (client.employees != null)
-                {
-                    foreach (EmployeeDTO employee in client.employees)
-                    {
-                        employeeNames.Add(employee.Employee_Name);
-                    }
-
-                    EmployeeList.ItemsSource = employeeNames;
-                }
+                employeeNames.Add(employee.Employee_Name);
             }
+
+            client.employees = response.employees;
+            EmployeeList.ItemsSource = employeeNames;
+
         }
 
         private bool employeeIsSelected()

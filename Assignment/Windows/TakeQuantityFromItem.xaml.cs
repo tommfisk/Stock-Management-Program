@@ -17,7 +17,7 @@ namespace Assignment.Windows
             this.client = client;
         }
 
-        private void TakeQuantity_Click(object sender, RoutedEventArgs e)
+        private async void TakeQuantity_Click(object sender, RoutedEventArgs e)
         {
             RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(3).WithEmployeeId(client.selectedEmployee.ID);
             ItemDTOBuilder itemDTOBuilder = new ItemDTOBuilder();
@@ -57,7 +57,16 @@ namespace Assignment.Windows
             {
                 ItemDTO item = itemDTOBuilder.WithID(int.Parse(ItemId.Text)).WithQuantity(int.Parse(QuantityToTake.Text)).Build();
                 RequestDTO request = requestDTOBuilder.WithItem(item).Build();
-                client.QueueRequest(request);
+                ResponseDTO response = await client.QueueRequest(request);
+
+                if (response.numRowsAffected == 1)
+                {
+                    MessageBox.Show("Quantity Taken");
+                }
+                else
+                {
+                    MessageBox.Show("Quantity Not Taken");
+                }
                 this.Close();
             }
         }

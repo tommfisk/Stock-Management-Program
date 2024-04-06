@@ -30,18 +30,13 @@ namespace Assignment.Windows
             transactionLog();
         }
 
-        private void transactionLog()
+        private async void transactionLog()
         {
             RequestDTO request = new RequestDTOBuilder().WithCommand(6).Build();
-            client.QueueRequest(request);
+            
+            ResponseDTO response = await client.QueueRequest(request);
 
-            while (TransactionDataGrid.ItemsSource == null)
-            {
-                if (client.transactions != null)
-                {
-                    TransactionDataGrid.ItemsSource = client.transactions;
-                }
-            }
+            TransactionDataGrid.ItemsSource = response.transactions;
         }
     }
 }

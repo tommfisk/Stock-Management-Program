@@ -30,19 +30,13 @@ namespace Assignment.Windows
             inventoryReport();
         }
 
-        private void inventoryReport()
+        private async void inventoryReport()
         {
             RequestDTO request = new RequestDTOBuilder().WithCommand(4).Build();
-            client.QueueRequest(request);
+            ResponseDTO response = await client.QueueRequest(request);
 
-            while (InventoryDataGrid.ItemsSource == null)
-            {
-                if (client.items != null)
-                {
-                    InventoryDataGrid.ItemsSource = client.items;
-                }
-            }
-            
+            InventoryDataGrid.ItemsSource = response.items;
+
         }
 
     }

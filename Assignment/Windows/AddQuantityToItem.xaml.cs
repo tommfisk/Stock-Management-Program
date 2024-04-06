@@ -17,7 +17,7 @@ namespace Assignment.Windows
             this.client = client;
         }
 
-        private void AddQuantity_Click(object sender, RoutedEventArgs e)
+        private async void AddQuantity_Click(object sender, RoutedEventArgs e)
         {
             const int ADD_QUANTITY_TO_ITEM = 2;
             RequestDTOBuilder requestDTOBuilder = new RequestDTOBuilder().WithCommand(ADD_QUANTITY_TO_ITEM).WithEmployeeId(client.selectedEmployee.ID);
@@ -58,7 +58,16 @@ namespace Assignment.Windows
             {
                 ItemDTO item = itemDTOBuilder.WithID(int.Parse(ItemId.Text)).WithQuantity(int.Parse(QuantityToAdd.Text)).Build();
                 RequestDTO request = requestDTOBuilder.WithItem(item).Build();
-                client.QueueRequest(request);
+                ResponseDTO response = await client.QueueRequest(request);
+
+                if (response.numRowsAffected == 1)
+                {
+                    MessageBox.Show("Quantity Added");
+                }
+                else
+                {
+                    MessageBox.Show("Quantity Not Added");
+                }
                 this.Close();
             }
         }
