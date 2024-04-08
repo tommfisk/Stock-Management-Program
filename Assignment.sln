@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment", "Assignment\Assignment.csproj", "{A9D4C4C8-E250-4DC5-BFA1-E99DFC8DD990}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF_Client", "Assignment\WPF_Client.csproj", "{A9D4C4C8-E250-4DC5-BFA1-E99DFC8DD990}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{72AFD501-BCDF-4C00-8786-277B06A76B02}"
 EndProject
