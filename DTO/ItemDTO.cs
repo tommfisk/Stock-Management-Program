@@ -27,10 +27,6 @@ namespace DTO
             this.Price = price;
             this.Date_Created = date_created;
         }
-
-        public ItemDTO()
-        {
-        }
     }
 }
 

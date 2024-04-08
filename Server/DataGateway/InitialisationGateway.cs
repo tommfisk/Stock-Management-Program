@@ -127,11 +127,11 @@ namespace DataGateway
         {
             commandSequence = new List<OracleCommand>()
             {
-                clearItemTable,
-                restartItemSeq,
-
                 clearTransactionTable,
                 restartTransactionSeq,
+
+                clearItemTable,
+                restartItemSeq,
 
                 clearEmployeeTable,
                 restartEmployeeSeq,
@@ -156,10 +156,10 @@ namespace DataGateway
                         dataGatewayFacade.AddEmployee(new EmployeeDTO("Phil"));
                         dataGatewayFacade.AddEmployee(new EmployeeDTO("Jan"));
 
-                        dataGatewayFacade.AddItem(new ItemDTO("pen", 10, 2.50));
+                        dataGatewayFacade.AddItem(new ItemDTOBuilder().WithName("pen").WithQuantity(10).WithPrice(1.50).Build());
                         dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 1, 1, 10));
 
-                        dataGatewayFacade.AddItem(new ItemDTO("eraser", 20, 3.50));
+                        dataGatewayFacade.AddItem(new ItemDTOBuilder().WithName("pencil").WithQuantity(5).WithPrice(1.25).Build());
                         dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 2, 2, 20));
 
                         dataGatewayFacade.TakeQuantityFromItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
