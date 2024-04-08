@@ -25,15 +25,10 @@ namespace WPF_Client
         public List<EmployeeDTO> employees { get; set; }
         public EmployeeDTO selectedEmployee { get; set; }
 
-        private ConcurrentQueue<RequestDTO> requests;
-        public ConcurrentQueue<Type> responses { get; set; }
-
 
         public MyWPFClient()
         {
             tcpClient = new TcpClient();
-            requests = new ConcurrentQueue<RequestDTO>();
-            responses = new ConcurrentQueue<Type>();
             if(!Connect("localhost", 4444))
             {
                 MessageBox.Show("COULD NOT CONNECT TO SERVER");

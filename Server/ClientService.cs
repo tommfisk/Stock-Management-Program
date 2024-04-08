@@ -61,8 +61,7 @@ namespace ServerSide
             catch (IOException e)
             {
                 Console.WriteLine("ERROR: " + e.Message);
-            }
-            
+            }  
         }
 
         public void Close()

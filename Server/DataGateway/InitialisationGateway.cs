@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Net.Http.Headers;
+using System.Transactions;
 
 namespace DataGateway
 {
@@ -12,7 +13,7 @@ namespace DataGateway
     {
         private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
 
-        private OracleCommand createEmployeeSeq = new OracleCommand
+        /*private OracleCommand createEmployeeSeq = new OracleCommand
         {
             CommandText = "CREATE SEQUENCE Employee_Seq START WITH 1 INCREMENT BY 1",
             CommandType = CommandType.Text
@@ -82,6 +83,42 @@ namespace DataGateway
         {
             CommandText = "DROP TABLE Transaction",
             CommandType = CommandType.Text
+        };*/
+
+        private OracleCommand restartTransactionSeq = new OracleCommand
+        {
+            CommandText = "ALTER SEQUENCE TRANSACTION_SEQ RESTART",
+            CommandType = CommandType.Text
+        };
+
+        private OracleCommand restartItemSeq = new OracleCommand
+        {
+            CommandText = "ALTER SEQUENCE ITEM_SEQ RESTART",
+            CommandType = CommandType.Text
+        };
+
+        private OracleCommand restartEmployeeSeq = new OracleCommand
+        {
+            CommandText = "ALTER SEQUENCE EMPLOYEE_SEQ RESTART",
+            CommandType = CommandType.Text
+        };
+
+        private OracleCommand clearItemTable = new OracleCommand
+        {
+            CommandText = "DELETE ITEM",
+            CommandType = CommandType.Text
+        };
+
+        private OracleCommand clearEmployeeTable = new OracleCommand
+        {
+            CommandText = "DELETE EMPLOYEE",
+            CommandType = CommandType.Text
+        };
+
+        private OracleCommand clearTransactionTable = new OracleCommand
+        {
+            CommandText = "DELETE TRANSACTION",
+            CommandType = CommandType.Text
         };
 
         private List<OracleCommand> commandSequence;
@@ -90,61 +127,59 @@ namespace DataGateway
         {
             commandSequence = new List<OracleCommand>()
             {
-                dropTransactionTable,
-                dropTransactionSeq,
+                clearItemTable,
+                restartItemSeq,
 
-                dropItemTable,
-                dropItemSeq,
+                clearTransactionTable,
+                restartTransactionSeq,
 
-                dropEmployeeTable,
-                dropEmployeeSeq,
-
-                createItemTable,
-                createItemSeq,
-
-                createEmployeeTable,
-                createEmployeeSeq,
-
-                createTransactionTable,
-                createTransactionSeq
+                clearEmployeeTable,
+                restartEmployeeSeq,
             };
         }
 
         public void InitialiseOracleDatabase()
         {
-            OracleConnection conn = GetOracleConnection();
-
-            foreach (OracleCommand c in commandSequence)
+            try
             {
-                try
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.RequiresNew))
                 {
-                    c.Connection = conn;
-                    c.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("ERROR: SQL command failed\n" + e.StackTrace, e);
+                    using (OracleConnection conn = GetOracleConnection())
+                    {
+                        foreach (OracleCommand c in commandSequence)
+                        {
+                            c.Connection = conn;
+                            c.ExecuteNonQuery();
+                        }
+
+                        dataGatewayFacade.AddEmployee(new EmployeeDTO("Graham"));
+                        dataGatewayFacade.AddEmployee(new EmployeeDTO("Phil"));
+                        dataGatewayFacade.AddEmployee(new EmployeeDTO("Jan"));
+
+                        dataGatewayFacade.AddItem(new ItemDTO("pen", 10, 2.50));
+                        dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 1, 1, 10));
+
+                        dataGatewayFacade.AddItem(new ItemDTO("eraser", 20, 3.50));
+                        dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 2, 2, 20));
+
+                        dataGatewayFacade.TakeQuantityFromItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
+                        dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Taken", 1, 1, 4));
+
+                        dataGatewayFacade.AddQuantityToItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
+                        dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Added", 2, 2, 2));
+                    }
+
+                    scope.Complete();
                 }
             }
-
-            dataGatewayFacade.AddEmployee(new EmployeeDTO("Graham"));
-            dataGatewayFacade.AddEmployee(new EmployeeDTO("Phil"));
-            dataGatewayFacade.AddEmployee(new EmployeeDTO("Jan"));
-
-
-            dataGatewayFacade.AddItem(new ItemDTO("pen", 10, 2.50));
-            dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 1, 1, 10));
-
-            dataGatewayFacade.AddItem(new ItemDTO("eraser", 20, 3.50));
-            dataGatewayFacade.AddTransaction(new TransactionDTO("Item Added", 2, 2, 20));
-
-            dataGatewayFacade.TakeQuantityFromItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
-            dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Taken", 1, 1, 4));
-
-            dataGatewayFacade.AddQuantityToItem(new ItemDTOBuilder().WithID(2).WithQuantity(2).Build());
-            dataGatewayFacade.AddTransaction(new TransactionDTO("Quantity Added", 2, 2, 2));
-
-            CloseOracleConnection(conn);
+            catch (TransactionAbortedException e)
+            {
+                Console.WriteLine("\tTransaction has been aborted: " + e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n\tEXCEPTION: " + e.Message);
+            }
         }
     }
 }
