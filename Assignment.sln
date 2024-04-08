@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGateway", "DataGateway\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.csproj", "{B6395B80-7BEC-4BD3-9856-D10B44CC5CD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Client", "Test_Client\Test_Client.csproj", "{76EB1A9A-3C62-40A6-A549-206F0FDE09EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B6395B80-7BEC-4BD3-9856-D10B44CC5CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6395B80-7BEC-4BD3-9856-D10B44CC5CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6395B80-7BEC-4BD3-9856-D10B44CC5CD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76EB1A9A-3C62-40A6-A549-206F0FDE09EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76EB1A9A-3C62-40A6-A549-206F0FDE09EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76EB1A9A-3C62-40A6-A549-206F0FDE09EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76EB1A9A-3C62-40A6-A549-206F0FDE09EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

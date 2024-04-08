@@ -1,22 +1,10 @@
-using Assignment;
 using DTO;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using Newtonsoft.Json;
 
-namespace WPF_Client
+namespace Test_Client
 {
-    public class MyWPFClient
+    public class Client
     {
         private TcpClient tcpClient;
         private NetworkStream stream;
@@ -26,19 +14,12 @@ namespace WPF_Client
         public EmployeeDTO selectedEmployee { get; set; }
 
 
-        public MyWPFClient()
+        public Client()
         {
             tcpClient = new TcpClient();
-            ConnectToServer();
-        }
-
-        private void ConnectToServer()
-        {
-            Thread.Sleep(5000);
-            while (!Connect("localhost", 4444))
+            if(!Connect("localhost", 4444))
             {
-                MessageBox.Show("Connection to server failed... retrying in 5 seconds.");
-                Thread.Sleep(5000);
+                Console.WriteLine("COULD NOT CONNECT TO SERVER");
             }
         }
 
@@ -60,7 +41,7 @@ namespace WPF_Client
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception: " + e.Message);
+                Console.WriteLine("Exception: " + e.Message);
                 return false;
             }
             return true;
@@ -90,15 +71,6 @@ namespace WPF_Client
         public Task<ResponseDTO> QueueRequest(RequestDTO request)
         {
             return Task.Run(() => Run(request));
-        }
-
-        private void GetAllEmployees()
-        {
-            if (employees == null)
-            {
-                QueueRequest(new RequestDTOBuilder().WithCommand(8).Build());
-            }
-            
         }
     }
 }

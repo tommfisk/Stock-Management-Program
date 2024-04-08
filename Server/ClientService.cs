@@ -11,8 +11,6 @@ namespace ServerSide
 {
     class ClientService
     {
-        private static readonly DataGatewayFacade dataGatewayFacade = DataGatewayFacade.getInstance();
-
         private Socket socket;
         private NetworkStream stream;
         public StreamReader reader { get; private set; }
