@@ -11,7 +11,7 @@ namespace DataGateway
         private static string DATABASE_USERNAME = "F012028L";
         private static string DATABASE_PASSWORD = "F012028L";
 
-        private static OracleDatabaseConnectionPool instance = new OracleDatabaseConnectionPool(10);
+        private static OracleDatabaseConnectionPool instance = new OracleDatabaseConnectionPool(100);
 
         private List<OracleConnection> availableConnections;
         private List<OracleConnection> busyConnections;
@@ -125,8 +125,15 @@ namespace DataGateway
         {
             if (busyConnections.Contains(conn))
             {
-                busyConnections.Remove(conn);
-                availableConnections.Add(conn);
+                lock (busyConnections)
+                {
+                    busyConnections.Remove(conn);
+                }
+                lock (availableConnections) 
+                {
+                    availableConnections.Add(conn);
+                }
+                
             }
         }
     }

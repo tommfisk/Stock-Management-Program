@@ -1,6 +1,9 @@
 using DTO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Test_Client
 {
@@ -12,22 +15,35 @@ namespace Test_Client
         private StreamWriter writer;
         public List<EmployeeDTO> employees { get; set; }
         public EmployeeDTO selectedEmployee { get; set; }
+        private bool clientRunning = true;
+        private ConcurrentQueue<RequestDTO> requests;
+        private ConcurrentQueue<ResponseDTO> responses;
 
 
         public Client()
         {
             tcpClient = new TcpClient();
-            if(!Connect("localhost", 4444))
-            {
-                Console.WriteLine("COULD NOT CONNECT TO SERVER");
-            }
+            requests = new ConcurrentQueue<RequestDTO>();
+            responses = new ConcurrentQueue<ResponseDTO>();
         }
 
-        public ResponseDTO Run(RequestDTO request)
+        public void Run()
         {
-            WriteToServer(request);
+            if (Connect("localhost", 4444))
+            {
+                Task.Run(ReadFromServer);
+                Task.Run(DisplayMessages);
 
-            return ReadFromServer();
+                while (clientRunning)
+                {
+                    if (requests.TryDequeue(out RequestDTO request))
+                    {
+                        WriteToServer(request);
+                    }
+                }
+            }
+            tcpClient.Close();
+            
         }
 
         private bool Connect(string url, int portNumber)
@@ -39,9 +55,8 @@ namespace Test_Client
                 reader = new StreamReader(stream, System.Text.Encoding.UTF8);
                 writer = new StreamWriter(stream, System.Text.Encoding.UTF8);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine("Exception: " + e.Message);
                 return false;
             }
             return true;
@@ -58,19 +73,30 @@ namespace Test_Client
             }
         }
 
-        private ResponseDTO ReadFromServer()
+        private void ReadFromServer()
         {
-            string serverResponse = reader.ReadLine();
-            while (serverResponse == null)
+            while (clientRunning)
             {
-                serverResponse = reader.ReadLine();
+                string serverResponse = reader.ReadLine();
+                responses.Enqueue(JsonConvert.DeserializeObject<ResponseDTO>(serverResponse));
             }
-            return JsonConvert.DeserializeObject<ResponseDTO>(serverResponse);
+
         }
 
-        public Task<ResponseDTO> QueueRequest(RequestDTO request)
+        private void DisplayMessages()
         {
-            return Task.Run(() => Run(request));
+            while (clientRunning)
+            {
+                if (responses.TryDequeue(out ResponseDTO response))
+                {
+                    Console.WriteLine("Request command " + response.command + " completed");
+                }
+            }
+        }
+
+        public void QueueRequest(RequestDTO request)
+        {
+            requests.Enqueue(request);
         }
     }
 }
